@@ -1,16 +1,11 @@
-<!--  -->
 <template>
-  <div class="register-container">
+    <div class="forget-container">
     <van-nav-bar
       class="app-nav-bar"
-      title="注册"
+      title="登录"
       left-arrow
       @click-left="$router.back()"
     />
-    <div class="register-text">
-      <h4>欢迎注册~闲情逸致</h4>
-      <p>明月别枝惊鹊，清风半夜鸣蝉</p>
-    </div>
     <van-cell-group>
       <van-field
         v-model="user.tellphone"
@@ -19,12 +14,6 @@
         left-icon="iconfont iconshouji"
         placeholder="请输入手机号"
       />
-      <van-field
-        v-model="user.name"
-        clearable
-        left-icon="user-circle-o"
-        placeholder="昵称"
-        />
       <van-field
         v-model="user.code"
         clearable
@@ -41,36 +30,35 @@
         type="password"
         icon-prefix="iconfont"
         left-icon="iconfont iconlock"
-        placeholder="请设置密码"
+        placeholder="请设置新密码"
       />
       <van-field
         v-model="user.newPassword"
         type="password"
         icon-prefix="iconfont"
         left-icon="iconfont iconlock"
-        placeholder="请重新输入密码"
+        placeholder="请重新输入新密码"
       />
     </van-cell-group>
-    <div class="register-btn-warp">
+    <div class="forget-btn-warp">
       <van-button
-        class="register-btn"
+        class="forget-btn"
         color="#00CED1"
         round
         block
-      > 注册
+      > 重置密码
       </van-button>
       </div>
-  </div>
+    </div>
 </template>
 
 <script>
 export default {
-  name: 'registerIndex',
+  name: 'forgerIndex',
   data () {
     return {
       user: {
         tellphone: '',
-        name: '',
         code: '',
         password: '',
         newPassword: ''
@@ -83,18 +71,11 @@ export default {
     }
   }
 }
-
 </script>
-<style lang='less' scoped>
-  .register-container {
-    .register-text{
-      padding:16px;
-      p {
-        color: #747483;
-        font-size:16px;
-      }
-    }
-    .register-btn-warp {
+
+<style scoped lang="less">
+  .forget-container {
+    .forget-btn-warp {
       padding:16px
     }
   }
