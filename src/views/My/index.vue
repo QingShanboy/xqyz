@@ -21,7 +21,10 @@
                 />
                 <div slot="title">昵称</div>
               </van-cell>
-              <van-grid>
+              <van-grid
+                :bosrde="false"
+                class="user-info-grid"
+                >
                 <van-grid-item>
                   <div slot="text">
                     <div class="span">1</div>
@@ -51,10 +54,15 @@
           </div>
         </div>
       </div>
-    </div>
-    <div class="user-set">
-      <van-cell title="URL 跳转" is-link url="/vant/mobile.html" />
-      <van-cell title="路由跳转" is-link to="index" />
+        <div class="user-news">
+          <van-cell title="消息通知" is-link to="" />
+          <van-cell title="收藏" is-link to="" />
+          <van-cell title="历史" is-link to="" />
+        </div>
+        <div class="user-set">
+          <van-cell title="设置" is-link to="" />
+          <van-cell title="意见反馈" is-link to="" />
+        </div>
     </div>
   </div>
 </template>
@@ -95,20 +103,43 @@ export default {
         z-index: 100;
         box-sizing: border-box;
         .profile {
+          display:flex;
+          justify-content:center;
+          align-items:center;
           background: #fff;
           border-radius: 12px;
           box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
           width: 100%;
           height: 100%;
-          // .userInfo {
-          // }
+          .userInfo {
+            width: 95%;
+            height: 95%;
+            .user-info-grid {
+              .span {
+                font-size:16px
+              }
+              .text {
+                font-size:24px
+              }
+            }
+          }
         }
       }
-    }
-    .user-set {
+      .user-news{
         width: 100%;
-        height: 180px;
-        margin: 100px 0;
+        height: 150px;
+        position: absolute;
+        left: 0;
+        top: 220px;
+
+      }
+      .user-set {
+        width: 100%;
+        height: 150px;
+        position: absolute;
+        left: 0;
+        top: 380px;
+      }
     }
   }
 </style>

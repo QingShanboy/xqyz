@@ -6,6 +6,10 @@
       left-arrow
       @click-left="$router.back()"
     />
+    <div class="login-text">
+      <h5>欢迎登录~闲情逸致</h5>
+      <p>行到水穷处，坐看云起时</p>
+    </div>
     <van-cell-group>
       <van-field
         v-model="user.tellphone"
@@ -55,6 +59,7 @@
         v-text="pwReg"
         class="login-pw-regist"
         color="#00CED1"
+        @click="registBtn"
         plain
       >{{pwReg}}
       </van-button>
@@ -81,12 +86,30 @@ export default {
     switchBtn () {
       this.isPwBtn = !this.isPwBtn
       this.pwCode = this.isPwBtn ? '短信登录' : '密码登录'
+      this.pwReg = this.isPwBtn ? '忘记密码' : '用户注册'
+    },
+    registBtn () {
+      if (this.isPwBtn) {
+        this.$router.push('/Forget')
+      } else {
+        this.$router.push('/Register')
+      }
     }
   }
 }
 </script>
 <style lang="less" scoped>
   .login-container {
+    .login-text{
+      padding:16px;
+      h5 {
+        margin: 0.25rem 0;
+      }
+      p {
+        color: #747483;
+        font-size:12px;
+      }
+    }
     .login-btn-warp {
       padding:16px
     }
@@ -94,11 +117,13 @@ export default {
       position: relative;
       margin-top: 40px;
       .login-pw-code{
+        background: #f5f7f9;
         border: 0
       }
       .login-pw-regist{
         position: absolute;
         right : 0;
+        background: #f5f7f9;
         border: 0
       }
     }

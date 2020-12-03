@@ -8,7 +8,7 @@
       @click-left="$router.back()"
     />
     <div class="register-text">
-      <h4>欢迎注册~闲情逸致</h4>
+      <h5>欢迎注册~闲情逸致</h5>
       <p>明月别枝惊鹊，清风半夜鸣蝉</p>
     </div>
     <van-cell-group>
@@ -89,9 +89,12 @@ export default {
   .register-container {
     .register-text{
       padding:16px;
+      h5 {
+        margin: 0.25rem 0;
+      }
       p {
         color: #747483;
-        font-size:16px;
+        font-size:12px;
       }
     }
     .register-btn-warp {

@@ -2,7 +2,7 @@
     <div class="forget-container">
     <van-nav-bar
       class="app-nav-bar"
-      title="登录"
+      title="重置密码"
       left-arrow
       @click-left="$router.back()"
     />
