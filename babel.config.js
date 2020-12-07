@@ -4,7 +4,8 @@ module.exports = {
     // ['import', {
     //   libraryName: 'vant',
     //   libraryDirectory: 'es',
-    //   style: true
-    // }, 'vant']
+    // //   style: true
+    // // }, 'vant']
+    ['@babel/plugin-transform-runtime']
   ]
 }

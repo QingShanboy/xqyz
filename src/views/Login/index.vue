@@ -10,17 +10,28 @@
       <h5>欢迎登录~闲情逸致</h5>
       <p>行到水穷处，坐看云起时</p>
     </div>
-    <van-cell-group>
+    <van-form
+      :show-error="false"
+      :show-error-message="false"
+      validate-first
+      ref="login-form"
+      @submit="onLogin"
+      @failed="loginFailed"
+    >
       <van-field
         v-model="user.tellphone"
         clearable
+        center
         icon-prefix="iconfont"
         left-icon="iconfont iconshouji"
         placeholder="请输入手机号"
+        name="mobile"
+        :rules="fromRules.tellphone"
       />
       <van-field
         v-model="user.password"
         v-if="isPwBtn"
+        center
         type="password"
         icon-prefix="iconfont"
         left-icon="iconfont iconlock"
@@ -30,16 +41,28 @@
       <van-field
         v-model="user.code"
         clearable
+        center
         icon-prefix="iconfont"
         left-icon="iconfont iconyanzhengma"
         placeholder="请输入验证码"
+        name="codes"
+        :rules="fromRules.code"
       >
         <template #button>
-          <van-button size="small" color="#00CED1" plain>发送验证码</van-button>
+          <van-count-down
+            v-if="isCountDown"
+            :time="5 * 60 * 1000"
+            format="mm:ss s"/>
+          <van-button
+            v-else
+            size="small"
+            color="#00CED1"
+            plain
+            @click.prevent="onSendSms"
+          >发送验证码</van-button>
         </template>
       </van-field>
-    </van-cell-group>
-    <div class="login-btn-warp">
+      <div class="login-btn-warp">
       <van-button
         class="login-btn"
         color="#00CED1"
@@ -47,6 +70,8 @@
         block
       > 登录
       </van-button>
+      </div>
+    </van-form >
     <div class="login-pw">
       <van-button
         class="login-pw-code"
@@ -64,7 +89,6 @@
       >{{pwReg}}
       </van-button>
     </div>
-    </div>
   </div>
 </template>
 <script>
@@ -79,10 +103,33 @@ export default {
       },
       isPwBtn: false,
       pwCode: '密码登录',
-      pwReg: '用户注册'
+      pwReg: '用户注册',
+      fromRules: {
+        tellphone: [
+          { required: true, message: '请输入手机号' },
+          { pattern: /^1[3|5|7|8|9]\d{9}$/, message: '手机号格式错误，请重新输入' }
+        ],
+        code: [
+          { required: true, message: '请输入验证码' },
+          { pattern: /^\d{6}$/, message: '验证码格式错误，请重新输入' }
+        ]
+      },
+      isCountDown: false
     }
   },
   methods: {
+    async onLogin () {
+      console.log(1)
+    },
+    loginFailed (error) {
+      console.log(error)
+      if (error.errors[0]) {
+        this.$toast({
+          message: error.errors[0].message,
+          position: 'top'
+        })
+      }
+    },
     switchBtn () {
       this.isPwBtn = !this.isPwBtn
       this.pwCode = this.isPwBtn ? '短信登录' : '密码登录'
@@ -93,6 +140,19 @@ export default {
         this.$router.push('/Forget')
       } else {
         this.$router.push('/Register')
+      }
+    },
+    async onSendSms () {
+      try {
+        await this.$refs['login-form'].validate('mobile')
+        this.isCountDown = true
+      } catch (err) {
+        this.isCountDown = false
+        console.log('验证失败', err)
+        this.$toast({
+          message: err.message,
+          position: 'top'
+        })
       }
     }
   }

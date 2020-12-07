@@ -5,7 +5,7 @@
       <div class="user-bg-warp">
         <div class="profile">
           <div class="userInfo">
-            <van-cell-group>
+            <van-cell-group  :border="false">
               <van-cell
                title="单元格"
                value="内容"
@@ -22,29 +22,29 @@
                 <div slot="title">昵称</div>
               </van-cell>
               <van-grid
-                :bosrde="false"
+                :border="false"
                 class="user-info-grid"
                 >
-                <van-grid-item>
-                  <div slot="text">
+                <van-grid-item class="info-grid-data">
+                  <div slot="text" class="text-warp">
                     <div class="span">1</div>
                     <div class="text">头条 </div>
                   </div>
                 </van-grid-item>
-                <van-grid-item>
-                  <div slot="text">
+                <van-grid-item class="info-grid-data">
+                  <div slot="text"  class="text-warp">
                     <div class="span">2</div>
                     <div class="text">关注</div>
                   </div>
                 </van-grid-item>
-                <van-grid-item>
-                  <div slot="text">
+                <van-grid-item class="info-grid-data">
+                  <div slot="text" class="text-warp">
                     <div class="span">99</div>
                     <div class="text">获赞</div>
                   </div>
                 </van-grid-item>
-                <van-grid-item>
-                  <div slot="text">
+                <van-grid-item class="info-grid-data">
+                  <div slot="text" class="text-warp">
                     <div class="span">288</div>
                     <div class="text">粉丝 </div>
                   </div>
@@ -62,6 +62,7 @@
         <div class="user-set">
           <van-cell title="设置" is-link to="" />
           <van-cell title="意见反馈" is-link to="" />
+          <van-cell class="logout-cell" title="退出登录" is-link to="" />
         </div>
     </div>
   </div>
@@ -115,11 +116,19 @@ export default {
             width: 95%;
             height: 95%;
             .user-info-grid {
-              .span {
-                font-size:16px
-              }
-              .text {
-                font-size:24px
+              .info-grid-data {
+                .text-warp {
+                  display: flex;
+                  flex-direction: column;
+                  justify-content: center;
+                  align-items: center;
+                  .span {
+                    font-size:18px
+                  }
+                  .text {
+                    font-size:12px
+                  }
+                }
               }
             }
           }
@@ -139,6 +148,12 @@ export default {
         position: absolute;
         left: 0;
         top: 380px;
+        .logout-cell {
+          margin-top: 15px;
+          text-align: center;
+          font-size: 18px;
+          color: red;
+        }
       }
     }
   }
