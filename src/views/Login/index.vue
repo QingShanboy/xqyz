@@ -40,6 +40,29 @@
       </van-field>
       <van-field
         v-model="user.code"
+        v-if="isPwBtn"
+        clearable
+        center
+        icon-prefix="iconfont"
+        left-icon="iconfont iconyanzhengma"
+        placeholder="请输入验证码"
+        name="codes"
+        :rules="fromRules.code"
+      >
+        <template #button>
+          <van-button
+            size="small"
+            color="#00CED1"
+            plain
+            @click.prevent="getCaptchas"
+          >
+          <div v-html="svg"></div>
+          </van-button>
+        </template>
+      </van-field>
+      <van-field
+        v-model="user.code"
+        v-else
         clearable
         center
         icon-prefix="iconfont"
@@ -92,6 +115,7 @@
   </div>
 </template>
 <script>
+import { getCaptchas } from '@/api/login'
 export default {
   name: 'LoginIndex',
   data () {
@@ -101,6 +125,7 @@ export default {
         code: '',
         password: ''
       },
+      svg: '',
       isPwBtn: false,
       pwCode: '密码登录',
       pwReg: '用户注册',
@@ -116,6 +141,9 @@ export default {
       },
       isCountDown: false
     }
+  },
+  mounted () {
+    this.getCaptchas()
   },
   methods: {
     async onLogin () {
@@ -154,6 +182,14 @@ export default {
           position: 'top'
         })
       }
+    },
+    getCaptchas () {
+      getCaptchas().then((res) => {
+        console.log(res)
+        if (res.code === 200) {
+          this.svg = res.data
+        }
+      })
     }
   }
 }

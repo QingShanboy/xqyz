@@ -41,9 +41,15 @@ const routes = [
     component: () => import('@/views/Forget')
   },
   {
-    path: '/Register',
-    name: 'Register',
-    component: () => import('@/views/Register')
+    path: '/Search',
+    name: 'Search',
+    component: () => import('@/views/Search')
+  },
+  {
+    path: '/Article/:articleId',
+    name: 'Article',
+    component: () => import('@/views/Article/'),
+    props: true
   }
 ]
 

@@ -8,6 +8,7 @@
         icon="search"
         type="info"
         round
+        to="/Search"
       >搜索</van-button>
     </van-nav-bar>
     <van-tabs class="home-tabs" v-model="active">

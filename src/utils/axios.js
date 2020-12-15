@@ -47,6 +47,24 @@ class HttpRequest {
     this.interceptors(instance)
     return instance.request(newOptions)
   }
+
+  // 封装get请求
+  get (url, config) {
+    const optinos = Object.assign({
+      method: 'get',
+      url: url
+    }, config)
+    return this.request(optinos)
+  }
+
+  // 封装get请求
+  post (url, data) {
+    return this.request({
+      method: 'post',
+      url: url,
+      data: data
+    })
+  }
 }
 // const instance = axios.create({
 //   baseURL: process.env.NODE_ENV === 'development' ? config.baseUrl.dev : config.baseUrl.pro,
