@@ -16,9 +16,20 @@
       validate-first
       ref="login-form"
       @submit="onLogin"
-      @failed="loginFailed"
     >
       <van-field
+        v-model="user.name"
+        v-if="isPwBtn"
+        clearable
+        center
+        icon-prefix="iconfont"
+        left-icon="iconfont iconshouji"
+        placeholder="请输入用户名或手机号"
+        name="mobile"
+        :rules="fromRules.userName"
+      />
+      <van-field
+        v-else
         v-model="user.tellphone"
         clearable
         center
@@ -115,47 +126,85 @@
   </div>
 </template>
 <script>
-import { getCaptchas } from '@/api/login'
+import { getLogin } from '@/api/login'
+// import { v4 as uuidv4 } from 'uuid'
+
 export default {
   name: 'LoginIndex',
   data () {
     return {
       user: {
+        name: '',
         tellphone: '',
         code: '',
         password: ''
       },
       svg: '',
+      sid: '',
       isPwBtn: false,
       pwCode: '密码登录',
       pwReg: '用户注册',
       fromRules: {
+        userName: [
+          { required: true, message: '请输入用户名' }
+        ],
         tellphone: [
           { required: true, message: '请输入手机号' },
           { pattern: /^1[3|5|7|8|9]\d{9}$/, message: '手机号格式错误，请重新输入' }
         ],
         code: [
-          { required: true, message: '请输入验证码' },
-          { pattern: /^\d{6}$/, message: '验证码格式错误，请重新输入' }
+          { required: true, message: '请输入验证码' }
         ]
       },
       isCountDown: false
     }
   },
   mounted () {
+    // if (localStorage.getItem('sid')) {
+    //   debugger
+    //   this.sid = localStorage.getItem('sid')
+    // } else {
+    //   this.sid = uuidv4()
+    //   debugger
+    //   localStorage.setItem('sid', this.sid)
+    // }
+    // this.$store.commit('SET_SID', this.sid)
     this.getCaptchas()
   },
   methods: {
     async onLogin () {
-      console.log(1)
-    },
-    loginFailed (error) {
-      console.log(error)
-      if (error.errors[0]) {
-        this.$toast({
-          message: error.errors[0].message,
-          position: 'top'
-        })
+      // Toast.loading({
+      //   message: '登录中...',
+      //   forbidClick: true,
+      //   duration: 0
+      // })
+      const sid = this.$store.state.user.sid
+      this.user.sid = sid
+      // await getLogin(this.user).then(res => {
+      //   if (res.code === 200) {
+      //     this.$store.commit('SET_TOKEN', res.token)
+      //     Toast.success('登录成功')
+      //   } else {
+      //     Toast.fail(`登录失败${res.status}${res.message}`)
+      //   }
+      // })
+      try {
+        const res = await getLogin(this.user)
+        console.log(res)
+        if (res.code === 200) {
+          this.$store.commit('SET_TOKEN', res.token)
+          console.log(this.$store.state)
+          debugger
+          this.$toast.success('登录成功')
+          const redirect = decodeURIComponent(this.$route.query.redirect || '/') // 获取登录成功后要跳转的路由。
+          this.$router.push({
+            path: redirect
+          })
+        } else {
+          this.$toast.fail(`登录失败-----${res.msg}`)
+        }
+      } catch (err) {
+        console.log(err)
       }
     },
     switchBtn () {
@@ -184,11 +233,16 @@ export default {
       }
     },
     getCaptchas () {
-      getCaptchas().then((res) => {
-        console.log(res)
-        if (res.code === 200) {
-          this.svg = res.data
-        }
+      // const sid = this.$store.state.sid
+      // getCaptchas(sid).then((res) => {
+      //   console.log(sid)
+      //   console.log(res)
+      //   if (res.code === 200) {
+      //     this.svg = res.data
+      //   }
+      // })
+      this.$store.dispatch('getCaptchas').then(res => {
+        this.svg = res
       })
     }
   }

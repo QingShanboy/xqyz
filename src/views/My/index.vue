@@ -8,7 +8,6 @@
             <van-cell-group  :border="false">
               <van-cell
                title="单元格"
-               value="内容"
                center
               >
                 <van-image
@@ -20,6 +19,15 @@
                   src="https://img.yzcdn.cn/vant/cat.jpeg"
                 />
                 <div slot="title">昵称</div>
+                <van-button
+                  class="update-btn"
+                  :border="false"
+                  size="small"
+                  round
+                  to="/PersonalData"
+                >
+                  个人资料
+                </van-button>
               </van-cell>
               <van-grid
                 :border="false"
@@ -82,7 +90,8 @@ export default {
 
   // mounted: {},
 
-  methods: {}
+  methods: {
+  }
 }
 
 </script>
@@ -130,6 +139,9 @@ export default {
                   }
                 }
               }
+            }
+            .update-btn {
+              border: none;
             }
           }
         }
