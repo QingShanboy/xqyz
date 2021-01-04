@@ -174,11 +174,11 @@ export default {
   },
   methods: {
     async onLogin () {
-      // Toast.loading({
-      //   message: '登录中...',
-      //   forbidClick: true,
-      //   duration: 0
-      // })
+      this.toast.loading({
+        message: '登录中...',
+        forbidClick: true,
+        duration: 0
+      })
       const sid = this.$store.state.user.sid
       this.user.sid = sid
       // await getLogin(this.user).then(res => {

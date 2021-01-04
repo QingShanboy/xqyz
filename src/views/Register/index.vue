@@ -93,6 +93,7 @@
 </template>
 
 <script>
+import { getRegist } from '@/api/login'
 export default {
   name: 'registerIndex',
   data () {
@@ -120,7 +121,7 @@ export default {
         ],
         newPassword: [
           { required: true, message: '请再次输入密码 ' },
-          { validator: (val) => { return val === this.password }, message: '与原密码不一致，请重新输入' }
+          { validator: (val) => { return val === this.user.password }, message: '与原密码不一致，请重新输入' }
         ]
       },
       svg: ''
@@ -130,11 +131,34 @@ export default {
     this.getCaptchas()
   },
   methods: {
-    onRegist () {
-      this.isPwBtn = !this.isPwBtn
-    },
-    validator (val) {
-      return val === this.password
+    async onRegist () {
+      this.$toast.loading({
+        message: '登录中...',
+        forbidClick: true,
+        duration: 0
+      })
+      const sid = this.$store.state.user.sid
+      this.user.sid = sid
+      // await getLogin(this.user).then(res => {
+      //   if (res.code === 200) {
+      //     this.$store.commit('SET_TOKEN', res.token)
+      //     Toast.success('登录成功')
+      //   } else {
+      //     Toast.fail(`登录失败${res.status}${res.message}`)
+      //   }
+      // })
+      try {
+        const res = await getRegist(this.user)
+        console.log(res)
+        if (res.code === 200) {
+          this.$toast.success('注册成功')// 注册成功转到登录页面。
+          this.$router.push('/Login')
+        } else {
+          this.$toast.fail(`登录失败-----${res.msg}`)
+        }
+      } catch (err) {
+        console.log(err)
+      }
     },
     onFailed (error) {
       if (error.errors[0]) {

@@ -12,9 +12,15 @@ export const getCaptchas = (sid) => {
 }
 
 export const getLogin = (userInfo) => {
-  debugger
   console.log(userInfo)
   return axios.post('/users/login', {
+    ...userInfo
+  })
+}
+
+export const getRegist = (userInfo) => {
+  console.log(userInfo)
+  return axios.post('/users/regist', {
     ...userInfo
   })
 }
