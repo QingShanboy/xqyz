@@ -11,46 +11,74 @@
       <h5>欢迎注册~闲情逸致</h5>
       <p>明月别枝惊鹊，清风半夜鸣蝉</p>
     </div>
-    <van-cell-group>
+    <van-form
+      :show-error="false"
+      :show-error-message="false"
+      validate-first
+      @submit="onRegist"
+      @failed="onFailed"
+    >
       <van-field
         v-model="user.tellphone"
         clearable
+        center
         icon-prefix="iconfont"
         left-icon="iconfont iconshouji"
         placeholder="请输入手机号"
+        name="mobile"
+        :rules="fromRules.tellphone"
       />
       <van-field
         v-model="user.name"
         clearable
-        left-icon="user-circle-o"
-        placeholder="昵称"
-        />
-      <van-field
-        v-model="user.code"
-        clearable
+        center
         icon-prefix="iconfont"
-        left-icon="iconfont iconyanzhengma"
-        placeholder="请输入验证码"
-      >
-        <template #button>
-          <van-button size="small" color="#00CED1" plain>发送验证码</van-button>
-        </template>
-      </van-field>
+        left-icon="iconfont iconshouji"
+        placeholder="请输入用户名或手机号"
+        name="userName"
+        :rules="fromRules.userName"
+      />
       <van-field
         v-model="user.password"
+        center
         type="password"
         icon-prefix="iconfont"
         left-icon="iconfont iconlock"
         placeholder="请设置密码"
-      />
+        :rules="fromRules.password"
+      >
+      </van-field>
       <van-field
         v-model="user.newPassword"
+        center
         type="password"
         icon-prefix="iconfont"
         left-icon="iconfont iconlock"
         placeholder="请重新输入密码"
-      />
-    </van-cell-group>
+        :rules="fromRules.newPassword"
+      >
+      </van-field>
+      <van-field
+        v-model="user.code"
+        clearable
+        center
+        icon-prefix="iconfont"
+        left-icon="iconfont iconyanzhengma"
+        placeholder="请输入验证码"
+        name="codes"
+        :rules="fromRules.code"
+      >
+        <template #button>
+          <van-button
+            size="small"
+            color="#00CED1"
+            plain
+            @click.prevent="getCaptchas"
+          >
+          <div v-html="svg"></div>
+          </van-button>
+        </template>
+      </van-field>
     <div class="register-btn-warp">
       <van-button
         class="register-btn"
@@ -59,7 +87,8 @@
         block
       > 注册
       </van-button>
-      </div>
+    </div>
+    </van-form >
   </div>
 </template>
 
@@ -74,12 +103,51 @@ export default {
         code: '',
         password: '',
         newPassword: ''
-      }
+      },
+      fromRules: {
+        userName: [
+          { required: true, message: '请输入用户名' }
+        ],
+        tellphone: [
+          { required: true, message: '请输入手机号' },
+          { pattern: /^1[3|5|7|8|9]\d{9}$/, message: '手机号格式错误，请重新输入' }
+        ],
+        code: [
+          { required: true, message: '请输入验证码' }
+        ],
+        password: [
+          { required: true, message: '请输入密码 ' }
+        ],
+        newPassword: [
+          { required: true, message: '请再次输入密码 ' },
+          { validator: (val) => { return val === this.password }, message: '与原密码不一致，请重新输入' }
+        ]
+      },
+      svg: ''
     }
   },
+  mounted () {
+    this.getCaptchas()
+  },
   methods: {
-    switchBtn () {
+    onRegist () {
       this.isPwBtn = !this.isPwBtn
+    },
+    validator (val) {
+      return val === this.password
+    },
+    onFailed (error) {
+      if (error.errors[0]) {
+        this.$toast({
+          message: error.errors[0].message,
+          position: 'top'
+        })
+      }
+    },
+    getCaptchas () {
+      this.$store.dispatch('getCaptchas').then(res => {
+        this.svg = res
+      })
     }
   }
 }
@@ -96,6 +164,9 @@ export default {
         color: #747483;
         font-size:12px;
       }
+    }
+    .van-button--small {
+      height: 0.95rem;
     }
     .register-btn-warp {
       padding:16px

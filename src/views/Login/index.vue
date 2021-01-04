@@ -16,6 +16,7 @@
       validate-first
       ref="login-form"
       @submit="onLogin"
+      @failed="onFailed"
     >
       <van-field
         v-model="user.name"
@@ -25,7 +26,7 @@
         icon-prefix="iconfont"
         left-icon="iconfont iconshouji"
         placeholder="请输入用户名或手机号"
-        name="mobile"
+        name="userName"
         :rules="fromRules.userName"
       />
       <van-field
@@ -207,6 +208,14 @@ export default {
         console.log(err)
       }
     },
+    onFailed (error) {
+      if (error.errors[0]) {
+        this.$toast({
+          message: error.errors[0].message,
+          position: 'top'
+        })
+      }
+    },
     switchBtn () {
       this.isPwBtn = !this.isPwBtn
       this.pwCode = this.isPwBtn ? '短信登录' : '密码登录'
@@ -259,6 +268,9 @@ export default {
         color: #747483;
         font-size:12px;
       }
+    }
+    .van-button--small {
+      height: 0.95rem;
     }
     .login-btn-warp {
       padding:16px
