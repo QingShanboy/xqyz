@@ -174,7 +174,7 @@ export default {
   },
   methods: {
     async onLogin () {
-      this.toast.loading({
+      this.$toast.loading({
         message: '登录中...',
         forbidClick: true,
         duration: 0
@@ -195,7 +195,6 @@ export default {
         if (res.code === 200) {
           this.$store.commit('SET_TOKEN', res.token)
           console.log(this.$store.state)
-          debugger
           this.$toast.success('登录成功')
           const redirect = decodeURIComponent(this.$route.query.redirect || '/') // 获取登录成功后要跳转的路由。
           this.$router.push({
