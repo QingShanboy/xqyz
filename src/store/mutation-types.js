@@ -5,6 +5,7 @@ const SER_ISLOGIN = 'SET_ISLOGGIN'
 const SET_MSG = 'SET_MSG'
 const SET_TOKEN = 'SET_TOKEN'
 const SET_HIDDE = 'SET_HIDDE'
+const SET_USERID = 'SET_USERID'
 
 export {
   INIT_WEBBSOCKET,
@@ -13,5 +14,6 @@ export {
   SER_ISLOGIN,
   SET_TOKEN,
   SET_MSG,
-  SET_HIDDE
+  SET_HIDDE,
+  SET_USERID
 }

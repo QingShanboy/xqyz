@@ -1,5 +1,5 @@
 import WebSocketClient from '@/utils/websocket'
-import { INIT_WEBBSOCKET, SET_SID, SET_USER, SER_ISLOGIN, SET_TOKEN, SET_MSG, SET_HIDDE } from '@/store/mutation-types'
+import { INIT_WEBBSOCKET, SET_SID, SET_USER, SER_ISLOGIN, SET_TOKEN, SET_MSG, SET_HIDDE, SET_USERID } from '@/store/mutation-types'
 import { getCaptchas } from '@/api/login'
 import { v4 as uuidv4 } from 'uuid'
 
@@ -10,6 +10,7 @@ export default {
     token: '',
     userInfo: {},
     isHide: false,
+    userId: '',
     num: 0
 
   },
@@ -31,6 +32,9 @@ export default {
       // 本地存储用户的基本信息
       localStorage.setItem('userInfo', JSON.stringify(value))
     },
+    [SET_USERID] (state, value) {
+      state.userId = value
+    },
     [SER_ISLOGIN] (state, value) {
       state.isLogin = value
     },
@@ -46,7 +50,8 @@ export default {
     isLogin: state => state.isLogin,
     token: state => state.token,
     sid: state => state.sid,
-    isHide: state => state.isHide
+    isHide: state => state.isHide,
+    userId: state => state.userId
   },
   actions: {
     message ({ commit }, msg) {

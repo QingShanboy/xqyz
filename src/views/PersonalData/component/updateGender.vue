@@ -1,38 +1,31 @@
 <!--  -->
 <template>
-  <div class="update-name">
-    <van-nav-bar
-      title="修改用户名"
-      left-text="取消"
-      right-text="完成"
-      @click-left="$emit('close')"
-      @click-right="onClickComplete"
+  <div class="update-gender">
+    <van-picker
+      show-toolbar
+      :columns="columns"
+      :default-index="gender"
+      @cancel="$emit('close')"
+      @confirm="onConfirm"
+      @change="onChangeGender"
     />
-    <van-field
-      v-model="updateNames"
-      rows="2"
-      autosize
-      type="textarea"
-      maxlength="50"
-      placeholder="请输入用户名"
-      show-word-limit
-/>
   </div>
 </template>
 
 <script>
 import { updataUser } from '@/api/users'
 export default {
-  name: 'UpdateName',
+  name: 'UpdateGender',
   props: {
     value: {
-      type: String,
+      type: Number,
       required: true
     }
   },
   data () {
     return {
-      updateNames: this.value
+      gender: this.value,
+      columns: ['男', '女']
     }
   },
   // components: {},
@@ -41,14 +34,18 @@ export default {
 
   // mounted: {},
   methods: {
-    async onClickComplete () {
+    onChangeGender (picker, value, index) {
+      console.log(picker, value, index)
+      this.gender = index
+    },
+    async onConfirm () {
       const id = this.$store.state.user.userId
       try {
-        const res = await updataUser(id, { name: this.updateNames })
+        const res = await updataUser(id, { gender: this.gender })
         console.log(res)
         if (res.code === 200) {
           this.$toast.success('修改成功')
-          this.$emit('input', this.updateNames)
+          this.$emit('input', this.gender)
         } else {
           this.$toast.fail(`修改失败-----${res.msg}`)
         }

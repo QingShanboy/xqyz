@@ -1,29 +1,25 @@
 <!--  -->
 <template>
-  <div class="update-name">
+  <div class="update-birthday">
     <van-nav-bar
-      title="修改用户名"
+      title="修改生日"
       left-text="取消"
       right-text="完成"
       @click-left="$emit('close')"
       @click-right="onClickComplete"
     />
-    <van-field
-      v-model="updateNames"
-      rows="2"
-      autosize
-      type="textarea"
-      maxlength="50"
-      placeholder="请输入用户名"
-      show-word-limit
-/>
+    <van-calendar
+      v-model="show"
+      :show-confirm="false"
+      @confirm="onConfirm"
+    />
   </div>
 </template>
 
 <script>
 import { updataUser } from '@/api/users'
 export default {
-  name: 'UpdateName',
+  name: 'UpdateBirthday',
   props: {
     value: {
       type: String,
@@ -32,7 +28,9 @@ export default {
   },
   data () {
     return {
-      updateNames: this.value
+      date: '',
+      show: true,
+      gender: this.value
     }
   },
   // components: {},
@@ -41,14 +39,17 @@ export default {
 
   // mounted: {},
   methods: {
+    onConfirm () {
+
+    },
     async onClickComplete () {
       const id = this.$store.state.user.userId
       try {
-        const res = await updataUser(id, { name: this.updateNames })
+        const res = await updataUser(id, { gender: this.gender })
         console.log(res)
         if (res.code === 200) {
           this.$toast.success('修改成功')
-          this.$emit('input', this.updateNames)
+          this.$emit('input', this.gender)
         } else {
           this.$toast.fail(`修改失败-----${res.msg}`)
         }

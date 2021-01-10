@@ -1,4 +1,5 @@
 import axios from 'axios'
+import store from '@/store/'
 
 class HttpRequest {
   constructor (baseUrl) {
@@ -21,7 +22,7 @@ class HttpRequest {
   interceptors (instance) {
     instance.interceptors.request.use(config => {
       // 在发送请求之前做些什么
-      const token = this.$store.state.user.token
+      const token = store.state.user.token
       token && (config.headers.Authorization = `Bearer ${token}`)
       return config
     }, error => {
@@ -63,6 +64,15 @@ class HttpRequest {
   post (url, data) {
     return this.request({
       method: 'post',
+      url: url,
+      data: data
+    })
+  }
+
+  // 封装get请求
+  patch (url, data) {
+    return this.request({
+      method: 'patch',
       url: url,
       data: data
     })
