@@ -7,8 +7,8 @@
         slot="title"
         icon="search"
         type="info"
-        round
         to="/Search"
+        round
       >搜索</van-button>
     </van-nav-bar>
     <van-tabs class="home-tabs" v-model="active">
@@ -17,7 +17,10 @@
         :title="item.name"
         :key='item.id'
       >
-        <article-list />
+        <article-list
+          :myChannels="channels"
+          :active="active"
+        />
       </van-tab>
       <!-- 占位符，保证导航栏不被遮挡住 -->
       <div slot="nav-right" class="nav-tabs-placeholder"></div>
@@ -51,6 +54,9 @@
 <script>
 import ArticleList from './components/articleList'
 import ChannerEdit from './components/channelEdit'
+import { mapState } from 'vuex'
+import { getUserChannels, getDefaultChannels } from '@/api/users'
+import { getItem } from '@/utils/storage'
 
 export default {
   name: 'HomeIndex',
@@ -58,45 +64,53 @@ export default {
     return {
       active: 0,
       isEditShow: false,
-      channels: [
-        {
-          id: 0,
-          name: '推荐'
-        },
-        {
-          id: 1,
-          name: '首页'
-        },
-        {
-          id: 2,
-          name: '新闻'
-        },
-        {
-          id: 3,
-          name: '古诗词'
-        },
-        {
-          id: 4,
-          name: '笑话'
-        },
-        {
-          id: 5,
-          name: '相声'
-        },
-        {
-          id: 6,
-          name: '短视频'
-        }
-      ]
+      channels: []
     }
   },
   components: {
     ArticleList,
     ChannerEdit
   },
-  // computed: {},
-  // mounted: {},
+  watch: {
+    user () {
+      this.active = 0
+      this.getChannels()
+    }
+  },
+  created  () {
+    this.getChannels()
+  },
+  computed: {
+    ...mapState(['user'])
+  },
+  // mounted () {
+  //   this.getChannels()
+  // },
   methods: {
+    async getChannels () {
+      let channels = []
+      if (this.user) {
+        const res = await getUserChannels()
+        console.log(res)
+        channels = res.data
+      } else {
+        // 没有登录，判断是否有本地存储的频道列表数据
+        const localChannels = getItem('user-channels')
+        // 如果有本地存储的频道列表则使用
+        if (localChannels) {
+          channels = localChannels
+        } else {
+          // 用户没有登录，也没有本地存储的频道，那就请求获取默认推荐的频道列表
+          const res = await getDefaultChannels()
+          channels = res.data
+        }
+      }
+      // 把处理好的数据放到 data 中以供模板使用
+      this.channels = channels
+    },
+    toSearch () {
+      this.$router.push('/Search')
+    }
     // switchActive (index) {
     //   console.log(index)
     //   this.active = index

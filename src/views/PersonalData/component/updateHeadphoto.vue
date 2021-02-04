@@ -13,20 +13,19 @@
 </template>
 
 <script>
-import { updataUser } from '@/api/users'
+import { uploadPhoto, updataUser } from '@/api/users'
 import 'cropperjs/dist/cropper.css'
 import Cropper from 'cropperjs'
 export default {
   name: 'UpdateHeadphoto',
   props: {
-    image: {
-      type: String,
+    file: {
       required: true
     }
   },
   data () {
     return {
-      photo: this.image,
+      image: window.URL.createObjectURL(this.file),
       cropper: null
     }
   },
@@ -76,18 +75,21 @@ export default {
       })
     },
     async onConfirm () {
-      // 如果要求 Content-Type 是mutipart/ form-data 一定要提交 formDate数据对象
-      // const fd = new FormData()
-      // fd.append('',文件的对象)
       const id = this.$store.state.user.userId
+      // 如果要求 Content-Type 是mutipart/ form-data 一定要提交 formDate数据对象
       const file = await this.getCroppedCanvas()
-      this.photo = window.URL.createObjectURL(file)
+      const fd = new FormData()
+      fd.append('file', file)
+      console.log(fd)
+      console.log(1)
       try {
-        const res = await updataUser(id, { headPhoto: this.photo })
+        const res = await uploadPhoto(fd)
         console.log(res)
-        if (res.code === 200) {
+        const res1 = await updataUser(id, { headPhoto: res.url })
+        console.log(res1)
+        if (res1.code === 200) {
           this.$toast.success('修改成功')
-          this.$emit('update-headphoto', this.photo)
+          this.$emit('update-headphoto', res.url)
         } else {
           this.$toast.fail(`修改失败-----${res.msg}`)
         }

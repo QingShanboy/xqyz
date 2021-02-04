@@ -12,8 +12,7 @@ class HttpRequest {
       baseURL: this.baseUrl,
       headers: {
         'Content-Type': 'application/json;charset=utf-8'
-      },
-      timeout: 10000
+      }
     }
     return config
   }
@@ -23,6 +22,7 @@ class HttpRequest {
     instance.interceptors.request.use(config => {
       // 在发送请求之前做些什么
       const token = store.state.user.token
+      console.log(`user${store.state.user}`)
       token && (config.headers.Authorization = `Bearer ${token}`)
       return config
     }, error => {
@@ -73,6 +73,24 @@ class HttpRequest {
   patch (url, data) {
     return this.request({
       method: 'patch',
+      url: url,
+      data: data
+    })
+  }
+
+  // 封装delete请求
+  delete (url, data) {
+    return this.request({
+      method: 'delete',
+      url: url,
+      data: data
+    })
+  }
+
+  // 封装delete请求
+  put (url, data) {
+    return this.request({
+      method: 'put',
       url: url,
       data: data
     })

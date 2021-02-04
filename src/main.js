@@ -9,6 +9,7 @@ import 'vant/lib/index.css'
 //  加载全局样式
 import './styles/index.less'
 
+import './utils/dayjs'
 // 自动设置REM基准值
 import 'amfe-flexible'
 

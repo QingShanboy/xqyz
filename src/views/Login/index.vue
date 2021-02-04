@@ -193,14 +193,11 @@ export default {
         const res = await getLogin(this.user)
         console.log(res)
         if (res.code === 200) {
+          this.$toast.success('登录成功')
           this.$store.commit('SET_TOKEN', res.token)
           this.$store.commit('SET_USERID', res._id)
           console.log(this.$store.state)
-          this.$toast.success('登录成功')
-          const redirect = decodeURIComponent(this.$route.query.redirect || '/') // 获取登录成功后要跳转的路由。
-          this.$router.push({
-            path: redirect
-          })
+          this.$router.push(this.$route.query.redirect || '/')
         } else {
           this.$toast.fail(`登录失败-----${res.msg}`)
         }

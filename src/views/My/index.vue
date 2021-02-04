@@ -16,9 +16,9 @@
                   height="60"
                   round
                   fit="cover"
-                  src="https://img.yzcdn.cn/vant/cat.jpeg"
+                  :src="user.headPhoto"
                 />
-                <div slot="title">昵称</div>
+                <div slot="title">{{user.name}}</div>
                 <van-button
                   class="update-btn"
                   :border="false"
@@ -77,10 +77,19 @@
 </template>
 
 <script>
+import { getUser } from '@/api/users'
 export default {
   name: 'MyIndex',
   data () {
     return {
+      user: {
+        name: '',
+        genders: '',
+        headPhoto: '',
+        addr: '',
+        signature: '',
+        birthday: ''
+      }
     }
   },
 
@@ -88,12 +97,22 @@ export default {
 
   // computed: {},
 
-  // mounted: {},
-
+  mounted () {
+    this.onGetUser()
+  },
   methods: {
+    async onGetUser () {
+      const id = this.$store.state.user.userId
+      try {
+        const res = await getUser(id)
+        // console.log(res)
+        this.user = res
+      } catch (err) {
+        console.log(err)
+      }
+    }
   }
 }
-
 </script>
 <style lang='less' scoped>
   .user-container {

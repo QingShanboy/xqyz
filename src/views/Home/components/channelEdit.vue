@@ -20,21 +20,28 @@
         :icon="(isEdit && index != 0) ? 'close' : ''"
         :key="item.id"
         :text="item.name"
-        @click="editChanner(index)" />
+        @click="editChanner(index,item)"
+       />
     </van-grid>
     <van-cell center :border="false">
       <div slot="title" class="channerEdi-title">频道推荐</div>
     </van-cell>
     <van-grid :gutter="10">
       <van-grid-item
-        v-for="value in 8"
-        :key="value"
-        text="文字" />
+        class="grid-item"
+        v-for="(channel, index) in recommendChannels"
+        :key="index"
+        :text="channel.name"
+        @click="addChannel(channel)"
+      />
     </van-grid>
   </div>
 </template>
 
 <script>
+import { getAllChannels, addChannels, unChannels } from '@/api/channels'
+import { mapState } from 'vuex'
+import { setItem } from '@/utils/storage'
 export default {
   name: 'ChannelEdit',
   props: {
@@ -49,26 +56,91 @@ export default {
   },
   data () {
     return {
-      isEdit: false
+      isEdit: false,
+      allChannels: []
     }
   },
+  created  () {
+    this.getChannels()
+  },
   // components: {},
-  // computed: {},
+  computed: {
+    ...mapState(['user']),
+    recommendChannels () {
+      return this.allChannels.filter(channel => {
+        // 判断是否属于用户频道
+        return !this.myChannels.find(userChannels => {
+          // 查找满足该条件的元素
+          return userChannels._id === channel._id
+        })
+      })
+    }
+  },
   // mounted: {},
   methods: {
-    editChanner (index) {
+    async getChannels () {
+      const id = this.$store.state.user.userId
+      try {
+        const res = await getAllChannels(id)
+        console.log(res)
+        this.allChannels = res
+      } catch (err) {
+        console.log(err)
+      }
+    },
+    editChanner (index, channel) {
       if (this.isEdit && (index !== 0)) {
-        this.delChanner(index)
+        // 移除我的频道
+        this.delChanner(index, channel)
       } else {
         this.switchChanner(index)
       }
     },
-    delChanner (index) {
-      this.delChanner(index)
+    async delChanner (index, channel) {
+      console.log(channel)
+      const id = channel._id
+      this.myChannels.splice(index, 1)
+      // TODO: 数据持久化
+      if (this.user) {
+        // 登录了，数据存储到线上
+        try {
+          const res = await unChannels(id)
+          this.$toast({
+            message: res.message,
+            position: 'top'
+          })
+        } catch (err) {
+          console.log(err)
+        }
+      } else {
+        // 没有登录，数据存储到本地
+        setItem('user-channels', this.userChannels)
+      }
     },
     switchChanner (index) {
       this.$emit('close')
       this.$emit('channerActive', index)
+    },
+    async addChannel (channel) {
+      console.log(`channel:${channel}`)
+      this.myChannels.push(channel)
+      const id = channel._id
+      // TODO: 数据持久化
+      if (this.user) {
+        // 登录了，数据存储到线上
+        try {
+          const res = await addChannels(id)
+          this.$toast({
+            message: res.message,
+            position: 'top'
+          })
+        } catch (err) {
+          console.log(err)
+        }
+      } else {
+        // 没有登录，数据存储到本地
+        setItem('user-channels', this.myChannels)
+      }
     }
   }
 }
@@ -89,6 +161,7 @@ export default {
       /deep/.van-grid-item__text {
         font-size: 14px;
         color: #222;
+        margin-top: 0;
       }
     }
     /deep/.van-grid-item__icon {

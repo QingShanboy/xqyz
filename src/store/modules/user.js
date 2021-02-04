@@ -1,13 +1,14 @@
 import WebSocketClient from '@/utils/websocket'
 import { INIT_WEBBSOCKET, SET_SID, SET_USER, SER_ISLOGIN, SET_TOKEN, SET_MSG, SET_HIDDE, SET_USERID } from '@/store/mutation-types'
 import { getCaptchas } from '@/api/login'
+import { getItem, setItem } from '@/utils/storage'
 import { v4 as uuidv4 } from 'uuid'
 
 export default {
   state: {
     sid: '',
     isLogin: false,
-    token: '',
+    token: getItem('token') || '',
     userInfo: {},
     isHide: false,
     userId: '',
@@ -23,14 +24,15 @@ export default {
       state.sid = value
     },
     [SET_TOKEN] (state, value) {
+      console.log(`token${value}`)
       state.token = value
-      localStorage.setItem('token', value)
+      setItem('token', state.token)
     },
     [SET_USER] (state, value) {
       if (value === '') return
       state.userInfo = value
       // 本地存储用户的基本信息
-      localStorage.setItem('userInfo', JSON.stringify(value))
+      setItem('userInfo', state.userInfo)
     },
     [SET_USERID] (state, value) {
       state.userId = value
@@ -48,7 +50,12 @@ export default {
   getters: {
     user: state => state.userInfo,
     isLogin: state => state.isLogin,
-    token: state => state.token,
+    token: state => {
+      if (!state.token) {
+        state.token = getItem('token')
+      }
+      return state.token
+    },
     sid: state => state.sid,
     isHide: state => state.isHide,
     userId: state => state.userId
@@ -60,10 +67,10 @@ export default {
     async getCaptchas ({ commit }) {
       let sid = ''
       if (localStorage.getItem('sid')) {
-        sid = localStorage.getItem('sid')
+        sid = getItem('sid')
       } else {
         sid = uuidv4()
-        localStorage.setItem('sid', sid)
+        setItem('sid', sid)
       }
       commit('SET_SID', sid)
       const result = await getCaptchas(sid)

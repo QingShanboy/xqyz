@@ -145,7 +145,7 @@
       <update-headphoto
         v-if="isUpatePhotoShow"
         v-model="user.headPhoto"
-        :image= "previewImage"
+        :file= "previewImage"
         @close= "isUpatePhotoShow = false"
         @update-headphoto= "user.headPhoto = $event"
       />
@@ -228,7 +228,7 @@ export default {
       const id = this.$store.state.user.userId
       try {
         const res = await getUser(id)
-        // console.log(res)
+        console.log(res)
         this.user = res
         this.date = res.birthday
       } catch (err) {
@@ -245,8 +245,10 @@ export default {
     onFileChange () {
       console.log('onFileChange')
       // 预览图片
-      const blob = window.URL.createObjectURL(this.$refs.file.files[0])
-      this.previewImage = blob
+      // const blob = window.URL.createObjectURL(this.$refs.file.files[0])
+      console.log(this.$refs.file)
+      const file = this.$refs.file.files[0]
+      this.previewImage = file
       this.isUpatePhotoShow = true
       // 为了解决相同的文件不触发change事件
       this.$refs.file.value = ''
