@@ -99,6 +99,7 @@
 <script>
 import './github-markdown.css'
 import { getArticlesText, onFollowAuthor, unFollowAuthor, unCollect, addCollect, unLike, addLike } from '@/api/article'
+// import { getArticlesComment } from '@/api/comment'
 import CommentList from './components/comment-list'
 import PostComment from './components/post-comment'
 import CommentReply from './components/comment-reply'
@@ -120,7 +121,7 @@ export default {
       commentList: [], // 文章评论列表
       totalCommentCount: 0, // 评论总数据量
       isReplyShow: false, // 控制回复的显示状态
-      replyComment: {} // 当前回复评论对象
+      replyComment: {}// 当前回复评论对象
     }
   },
 
@@ -141,6 +142,7 @@ export default {
       const res = await getArticlesText(this.articleId)
       this.article = res.data
       this.headPhoto = this.article.publisher.headPhoto
+      this.totalCommentCount = this.article.aritc_number
       console.log(res)
     },
     async onFollow () {
@@ -195,19 +197,14 @@ export default {
       }
       this.$toast.success(res.message)
     },
-    onPostSuccess (comment) {
-      console.log('index')
-      console.log(comment)
+    async onPostSuccess () {
       // 把发布成功的评论数据对象放到评论列表顶部
-      this.commentList.unshift(comment)
       // 更新评论的总数量
-      this.totalCommentCount++
-
       // 关闭发布评论弹出层
       this.isPostShow = false
     },
 
-    onReplyClick (comment) {
+    async onReplyClick (comment) {
       console.log('onReplyClick', comment)
       this.replyComment = comment
 

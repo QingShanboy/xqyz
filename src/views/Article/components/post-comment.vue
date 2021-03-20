@@ -56,12 +56,11 @@ export default {
       // // 封装请求方法
       // // 请求提交数据
       const res = await addArticlesComment(this.target, {
-        rootCommentId: this.target.toString(), // 评论的目标id（评论文章即为文章id，对评论进行回复则为评论id）
-        content: this.message, // 评论的内容
-        articleId: this.target
+        content: this.message // 评论的内容
         // art_id: this.articleId ? this.articleId.toString() : null // 文章id，对评论内容发表回复时，需要传递此参数，表明所属文章id。对文章进行评论，不要传此参数。
       })
-      this.$emit('post-success', res.data)
+      console.log(res, 2)
+      this.$emit('post-success')
       this.$toast.success('发布成功')
       // // 发布成功，清空文本框内容
       this.message = ''

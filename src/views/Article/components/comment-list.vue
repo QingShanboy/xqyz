@@ -35,7 +35,7 @@ export default {
     // 如果获取文章评论，则传递文章 ID
     // 如果获取评论回复，则传递评论 ID
     source: {
-      type: [Number, String, Object],
+      type: String,
       required: true
     },
 
@@ -76,21 +76,21 @@ export default {
       //   offset: this.offset, // 获取评论数据的偏移量，值为评论id，表示从此id的数据向后取，不传表示从第一页开始读取数据
       //   limit: this.limit // 每页大小
       // })
+      console.log(this.source, 1)
       const res = await getArticlesComment(this.source, {
         type: this.type, // 评论类型，a-对文章(article)的评论，c-对评论(comment)的回复
-        rootCommentId: this.source.toString(), // 源id，文章id或评论id
         page: this.offset, // 获取评论数据的偏移量，值为评论id，表示从此id的数据向后取，不传表示从第一页开始读取数据
         per_page: this.limit // 每页大小
       })
-      console.log(res.data.total)
+      console.log(res.data)
       this.$emit('update-total-count', res.data.total)
       // const { results } = res.data
       // // 2. 把数据放到列表中
       this.list.push(...res.data)
 
       // // 3. 将本次的 loading 关闭
-      this.loading = false
-      this.finished = true
+      // this.loading = false
+      // this.finished = true
       // // 4. 判断是否还有数据
       // if (results.length) {
       //   // 如果有，更新获取下一页数据的页码

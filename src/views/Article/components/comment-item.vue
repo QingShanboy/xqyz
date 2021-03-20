@@ -24,13 +24,13 @@
         </div>
       </div>
       <div class="content">{{ comment.content }}</div>
-      <div>
+      <div class="bottom">
          <van-button
           class="reply-btn"
           round
           size="mini"
           @click="$emit('reply-click', comment)"
-        >{{ comment.reply_count }} 回复></van-button>
+        >{{ comment.second_comment.length }}回复</van-button>
         <span class="pubdate">{{ comment.updatedAt | relativeTime }}</span>
       </div>
     </div>
@@ -91,7 +91,7 @@ export default {
     color: #222222;
   }
   .pubdate {
-    font-size: 10px;
+    font-size: 6px;
     margin-left: 10px;
   }
   .title-wrap {
@@ -105,6 +105,13 @@ export default {
   }
   .like-icon.liked {
     color: #ff69b4;
+  }
+  .reply-btn {
+    font-size: 10px;
+  }
+  .bottom {
+    display: flex;
+    align-items: center;
   }
 }
 </style>

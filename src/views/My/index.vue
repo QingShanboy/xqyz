@@ -70,13 +70,14 @@
         <div class="user-set">
           <van-cell title="设置" is-link to="" />
           <van-cell title="意见反馈" is-link to="" />
-          <van-cell class="logout-cell" title="退出登录" is-link to="" />
+          <van-cell class="logout-cell" title="退出登录" @click="onLogout"/>
         </div>
     </div>
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import { getUser } from '@/api/users'
 export default {
   name: 'MyIndex',
@@ -92,7 +93,9 @@ export default {
       }
     }
   },
-
+  computed: {
+    ...mapState(['user'])
+  },
   // components: {},
 
   // computed: {},
@@ -110,6 +113,22 @@ export default {
       } catch (err) {
         console.log(err)
       }
+    },
+    onLogout () {
+      // 提示用户确认退出
+      // 确认 -> 处理退出
+      this.$dialog.confirm({
+        title: '退出提示',
+        message: '确认退出吗？'
+      })
+        .then(() => { // 确认执行这里
+          // 清除用户登录状态
+          this.$store.commit('setUser', null)
+          this.$router.push('/Login')
+        })
+        .catch(() => { // 退出执行这里
+          // on cancel
+        })
     }
   }
 }

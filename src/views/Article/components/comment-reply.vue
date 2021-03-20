@@ -1,7 +1,7 @@
 <template>
   <div class="comment-reply">
     <!-- 头部信息 -->
-    <van-nav-bar :title="`${comment.reply_count}条回复`">
+    <van-nav-bar :title="`${comment.second_comment.length}条回复`">
       <van-icon
         slot="left"
         name="cross"
@@ -71,7 +71,7 @@ export default {
       required: true
     },
     articleId: {
-      type: [Number, String, Object],
+      type: [String],
       required: true
     }
   },
