@@ -1,5 +1,5 @@
 import WebSocketClient from '@/utils/websocket'
-import { INIT_WEBBSOCKET, SET_SID, SET_USER, SER_ISLOGIN, SET_TOKEN, SET_MSG, SET_HIDDE, SET_USERID } from '@/store/mutation-types'
+import { INIT_WEBBSOCKET, SET_SID, SET_USER, SET_ISLOGIN, SET_TOKEN, SET_MSG, SET_HIDDE, SET_USERID } from '@/store/mutation-types'
 import { getCaptchas } from '@/api/login'
 import { getItem, setItem } from '@/utils/storage'
 import { v4 as uuidv4 } from 'uuid'
@@ -12,7 +12,8 @@ export default {
     userInfo: {},
     isHide: false,
     userId: '',
-    num: 0
+    num: 0,
+    cachePages: ['bottonTabbar']
 
   },
   mutations: {
@@ -37,7 +38,7 @@ export default {
     [SET_USERID] (state, value) {
       state.userId = value
     },
-    [SER_ISLOGIN] (state, value) {
+    [SET_ISLOGIN] (state, value) {
       state.isLogin = value
     },
     [SET_MSG] (state, value) {
@@ -45,6 +46,19 @@ export default {
     },
     [SET_HIDDE] (state, value) {
       state.isHide = value
+    },
+    // 添加缓存页面
+    addCachePage (state, pageName) {
+      if (!state.cachePages.includes(pageName)) {
+        state.cachePages.push(pageName)
+      }
+    },
+    // 移除缓存页面
+    removeCachePage (state, pageName) {
+      const index = state.cachePages.indexOf(pageName)
+      if (index !== -1) {
+        state.cachePages.splice(index, 1)
+      }
     }
   },
   getters: {

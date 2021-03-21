@@ -54,7 +54,6 @@
 <script>
 import ArticleList from './components/articleList'
 import ChannerEdit from './components/channelEdit'
-import { mapState } from 'vuex'
 import { getUserChannels, getDefaultChannels } from '@/api/users'
 import { getItem } from '@/utils/storage'
 
@@ -72,24 +71,21 @@ export default {
     ChannerEdit
   },
   watch: {
-    user () {
-      this.active = 0
-      this.getChannels()
-    }
   },
   created  () {
     this.getChannels()
   },
   computed: {
-    ...mapState(['user'])
   },
   // mounted () {
   //   this.getChannels()
   // },
   methods: {
     async getChannels () {
+      console.log(2)
       let channels = []
-      if (this.user) {
+      console.log(this.user)
+      if (this.$store.state.isLogin) {
         const res = await getUserChannels()
         console.log(res)
         channels = res.data
@@ -102,7 +98,7 @@ export default {
         } else {
           // 用户没有登录，也没有本地存储的频道，那就请求获取默认推荐的频道列表
           const res = await getDefaultChannels()
-          channels = res.data
+          channels = [res.data]
         }
       }
       // 把处理好的数据放到 data 中以供模板使用

@@ -77,7 +77,6 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
 import { getUser } from '@/api/users'
 export default {
   name: 'MyIndex',
@@ -94,7 +93,6 @@ export default {
     }
   },
   computed: {
-    ...mapState(['user'])
   },
   // components: {},
 
@@ -124,6 +122,7 @@ export default {
         .then(() => { // 确认执行这里
           // 清除用户登录状态
           this.$store.commit('setUser', null)
+          this.$store.commit('setLogin', false)
           this.$router.push('/Login')
         })
         .catch(() => { // 退出执行这里

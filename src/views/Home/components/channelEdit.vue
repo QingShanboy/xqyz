@@ -40,7 +40,6 @@
 
 <script>
 import { getAllChannels, addChannels, unChannels } from '@/api/channels'
-import { mapState } from 'vuex'
 import { setItem } from '@/utils/storage'
 export default {
   name: 'ChannelEdit',
@@ -65,7 +64,6 @@ export default {
   },
   // components: {},
   computed: {
-    ...mapState(['user']),
     recommendChannels () {
       return this.allChannels.filter(channel => {
         // 判断是否属于用户频道
@@ -101,7 +99,7 @@ export default {
       const id = channel._id
       this.myChannels.splice(index, 1)
       // TODO: 数据持久化
-      if (this.user) {
+      if (this.$store.state.isLogin) {
         // 登录了，数据存储到线上
         try {
           const res = await unChannels(id)
@@ -125,8 +123,9 @@ export default {
       console.log(`channel:${channel}`)
       this.myChannels.push(channel)
       const id = channel._id
+      console.log('id', channel._id)
       // TODO: 数据持久化
-      if (this.user) {
+      if (this.$store.state.isLogin) {
         // 登录了，数据存储到线上
         try {
           const res = await addChannels(id)

@@ -18,5 +18,5 @@ export const unChannels = (id) => {
  */
 
 export const addChannels = (id) => {
-  return axios.put(`/channels/addChannels/${id}`)
+  return axios.put(`/users/addChannels/${id}`)
 }

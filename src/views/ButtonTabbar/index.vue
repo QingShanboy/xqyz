@@ -23,8 +23,9 @@ export default {
   // components: {},
 
   // computed: {},
-
-  // mounted: {},
+  mounted () {
+    this.$store.commit('addCachePage', 'bottonTabbar')
+  },
 
   methods: {}
 }

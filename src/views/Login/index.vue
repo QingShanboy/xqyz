@@ -196,7 +196,8 @@ export default {
           this.$toast.success('登录成功')
           this.$store.commit('SET_TOKEN', res.token)
           this.$store.commit('SET_USERID', res._id)
-          console.log(this.$store.state)
+          this.$store.commit('setLogin', true)
+          console.log('isLogin', this.$store.state.isLogin)
           this.$router.push(this.$route.query.redirect || '/')
         } else {
           this.$toast.fail(`登录失败-----${res.msg}`)

@@ -1,4 +1,14 @@
 import axios from '../utils/request'
+
+/**
+ * 获取所有文章
+ *
+ *
+ */
+
+export const getAllArticles = (id, data) => {
+  return axios.get('/articles', data)
+}
 /**
  * 获取频道列表的文章
  */
