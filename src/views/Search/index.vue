@@ -24,7 +24,6 @@ import SearchHistory from './components/searchHistory'
 import SearchResult from './components/searchResult'
 import { setItem, getItem } from '@/utils/storage'
 // import { getSearchHistories } from '@/api/search'
-import { mapState } from 'vuex'
 
 export default {
   name: 'SearchIndex',
@@ -42,7 +41,6 @@ export default {
     SearchResult
   },
   computed: {
-    ...mapState(['user'])
   },
   watch: {
     // 监视搜索历史记录的变化，存储到本地存储
